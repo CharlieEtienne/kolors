@@ -27,4 +27,29 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    /**
+     * Get User Projects.
+     */
+    public function projects()
+    {
+        return $this->hasMany('App\Project');
+    }
+
+    /**
+     * Get User Colors.
+     */
+    public function colors()
+    {
+        return $this->hasManyThrough('App\Color', 'App\Project');
+    }
+
+    /**
+     * Get User Typos.
+     */
+    public function typos()
+    {
+        return $this->hasManyThrough('App\Typo', 'App\Project');
+    }
 }
