@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TypoController extends Controller
+class PaletteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +13,7 @@ class TypoController extends Controller
      */
     public function index()
     {
-        //
+        // 
     }
 
     /**

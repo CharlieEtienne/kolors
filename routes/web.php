@@ -11,10 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'MainController@index')->name('main');
+
+Route::resource('p', 'ProjectController')->middleware('auth');
+Route::resource('p.c', 'PaletteController')->middleware('auth');
+Route::resource('p.t', 'TypoController')->middleware('auth');
+
+Route::post('updateColorPalette', 'ColorController@updateColorPalette')->middleware('auth');
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

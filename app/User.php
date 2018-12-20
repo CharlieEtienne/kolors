@@ -38,11 +38,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Get User Colors.
+     * Get User Palettes.
      */
-    public function colors()
+    public function palettes()
     {
-        return $this->hasManyThrough('App\Color', 'App\Project');
+        return $this->hasManyThrough('App\Palette', 'App\Project');
     }
 
     /**

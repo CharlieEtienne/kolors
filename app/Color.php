@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Color extends Model
 {
     /**
-     * Get Color parent Project.
+     * Get Color parent Palette.
      */
-    public function project()
+    public function palette()
     {
-        return $this->belongsTo('App\Project');
+        return $this->belongsTo('App\Palette');
     }
 }
