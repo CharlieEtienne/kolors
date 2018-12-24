@@ -2,9 +2,7 @@
 
 @section('css')
     <style>
-        .toast-success.copy {
-            background-color: #000;
-        }
+        
     </style>
 @endsection
 
@@ -12,17 +10,20 @@
 <div class="container">
     
     @foreach ($project->palettes as $palette)
-        <div class="row mt-4">
-            <div class="col-sm-auto col-6 palette-heading">
-                <h3 class="text-truncate"><i class="fas fa-palette title-icon"></i>{{$palette->name}}</h3>
+        <div class="row mt-4 border-bottom border-faded cursor-pointer" data-toggle="collapse" data-target="#palette-{{ $palette->id }}" aria-expanded="false" aria-controls="palette-{{ $palette->id }}">
+            <div class="col-sm-5 col-md-auto col-5 palette-heading">
+                <h3 class="text-truncate editable-content"><i class="fas fa-palette title-icon"></i><span class="editable" data-id="{{ $palette->id }}" data-type="pl" data-action="update" data-elem="name">{{$palette->name}}</span></h3>
             </div>
-            <div class="col-sm-auto col-6 palette-mini-container">
+            <div class="col-sm-5 col-md-auto col-5 palette-mini-container">
                 <div class="palette-mini" id="palette-mini-{{ $palette->id }}">
                     @foreach ($palette->colors->take(8) as $color)<span style="background-color:{{ $color->code }}"></span>@endforeach
                 </div>
             </div>
+            <div class="col-auto ml-auto">
+                <button class="btn btn-sm btn-outline-secondary btn-expand pull-right collapsed" type="button" data-toggle="collapse" data-target="#palette-{{ $palette->id }}" aria-expanded="false" aria-controls="palette-{{ $palette->id }}"></button>
+            </div>
         </div>
-        <div class="row palette" id="palette-{{ $palette->id }}">
+        <div class="row palette collapse" id="palette-{{ $palette->id }}">
                 
             @foreach ($palette->colors as $color)    
                 <div class="col-lg-4 col-sm-6 col-12 color-item" id="color-{{ $color->id }}">
@@ -83,7 +84,7 @@
             });
 
             $(container)
-                .css('background-color', '#fff')
+                .css('background-color', '')
                 .tooltip('dispose');
 
             $(name).css('cssText', '');
@@ -94,21 +95,8 @@
         var clipboard = new ClipboardJS('.clipboard');
         
         clipboard.on('success', function(e) {
-
-            toastr.options = {
-                "positionClass": "toast-top-center",
-                "preventDuplicates": true,
-                "showDuration": "300",
-                "hideDuration": "600",
-                "timeOut": "1000",
-                "toastClass": 'copy',
-            };
-
+            toastr.options.toastClass = 'copy';
             toastr.success('Copied ' + e.text + ' to clipboard!');
-        });
-        
-        $('.color-container').each(function (e) {
-            
         });
 
     </script>
@@ -143,14 +131,7 @@
         
 
         function updateColorPalette(Color, Palette) {
-            toastr.options = {
-                "positionClass": "toast-top-center",
-                "preventDuplicates": true,
-                "showDuration": "300",
-                "hideDuration": "600",
-                "timeOut": "1000",
-                "toastClass": '',
-            };
+            toastr.options.toastClass = '';
             $.ajax({
                 url:"{{ url('/updateColorPalette') }}",
                 type:'POST',

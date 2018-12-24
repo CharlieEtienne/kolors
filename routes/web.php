@@ -14,9 +14,12 @@
 Route::get('/', 'MainController@index')->name('main');
 
 Route::resource('p', 'ProjectController')->middleware('auth');
-Route::resource('p.c', 'PaletteController')->middleware('auth');
-Route::resource('p.t', 'TypoController')->middleware('auth');
+Route::resource('pl', 'PaletteController')->middleware('auth');
+Route::resource('c', 'ColorController')->middleware('auth');
+Route::resource('t', 'TypoController')->middleware('auth');
 
 Route::post('updateColorPalette', 'ColorController@updateColorPalette')->middleware('auth');
+
+Route::post('/switch_mode', 'ThemeController@switch_mode')->middleware('auth');
 
 Auth::routes();

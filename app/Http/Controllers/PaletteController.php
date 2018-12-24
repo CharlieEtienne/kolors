@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Palette;
 
 class PaletteController extends Controller
 {
@@ -68,7 +69,14 @@ class PaletteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if ($request->has(['Elem', 'Type', 'Id', 'NewValue'])) {
+            $palette = Palette::findOrFail($request->Id);
+            if ($palette) {
+                $palette->{$request->Elem} = $request->NewValue;
+                $palette->save();
+                return response()->json(['success' => 'Palette successfully updated!']);
+            }
+        }
     }
 
     /**

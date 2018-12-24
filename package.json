@@ -27,7 +27,9 @@
     },
     "dependencies": {
         "clipboard": "^2.0.4",
+        "keyboardevent-key-polyfill": "^1.1.0",
         "material-design-icons": "^3.0.1",
+        "static-edit": "^1.0.0",
         "toastr": "^2.1.4"
     }
 }

@@ -21733,6 +21733,138 @@ return jQuery;
 
 /***/ }),
 
+/***/ "./node_modules/keyboardevent-key-polyfill/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/keyboardevent-key-polyfill/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* global define, KeyboardEvent, module */
+
+(function () {
+
+  var keyboardeventKeyPolyfill = {
+    polyfill: polyfill,
+    keys: {
+      3: 'Cancel',
+      6: 'Help',
+      8: 'Backspace',
+      9: 'Tab',
+      12: 'Clear',
+      13: 'Enter',
+      16: 'Shift',
+      17: 'Control',
+      18: 'Alt',
+      19: 'Pause',
+      20: 'CapsLock',
+      27: 'Escape',
+      28: 'Convert',
+      29: 'NonConvert',
+      30: 'Accept',
+      31: 'ModeChange',
+      32: ' ',
+      33: 'PageUp',
+      34: 'PageDown',
+      35: 'End',
+      36: 'Home',
+      37: 'ArrowLeft',
+      38: 'ArrowUp',
+      39: 'ArrowRight',
+      40: 'ArrowDown',
+      41: 'Select',
+      42: 'Print',
+      43: 'Execute',
+      44: 'PrintScreen',
+      45: 'Insert',
+      46: 'Delete',
+      48: ['0', ')'],
+      49: ['1', '!'],
+      50: ['2', '@'],
+      51: ['3', '#'],
+      52: ['4', '$'],
+      53: ['5', '%'],
+      54: ['6', '^'],
+      55: ['7', '&'],
+      56: ['8', '*'],
+      57: ['9', '('],
+      91: 'OS',
+      93: 'ContextMenu',
+      144: 'NumLock',
+      145: 'ScrollLock',
+      181: 'VolumeMute',
+      182: 'VolumeDown',
+      183: 'VolumeUp',
+      186: [';', ':'],
+      187: ['=', '+'],
+      188: [',', '<'],
+      189: ['-', '_'],
+      190: ['.', '>'],
+      191: ['/', '?'],
+      192: ['`', '~'],
+      219: ['[', '{'],
+      220: ['\\', '|'],
+      221: [']', '}'],
+      222: ["'", '"'],
+      224: 'Meta',
+      225: 'AltGraph',
+      246: 'Attn',
+      247: 'CrSel',
+      248: 'ExSel',
+      249: 'EraseEof',
+      250: 'Play',
+      251: 'ZoomOut'
+    }
+  };
+
+  // Function keys (F1-24).
+  var i;
+  for (i = 1; i < 25; i++) {
+    keyboardeventKeyPolyfill.keys[111 + i] = 'F' + i;
+  }
+
+  // Printable ASCII characters.
+  var letter = '';
+  for (i = 65; i < 91; i++) {
+    letter = String.fromCharCode(i);
+    keyboardeventKeyPolyfill.keys[i] = [letter.toLowerCase(), letter.toUpperCase()];
+  }
+
+  function polyfill () {
+    if (!('KeyboardEvent' in window) ||
+        'key' in KeyboardEvent.prototype) {
+      return false;
+    }
+
+    // Polyfill `key` on `KeyboardEvent`.
+    var proto = {
+      get: function (x) {
+        var key = keyboardeventKeyPolyfill.keys[this.which || this.keyCode];
+
+        if (Array.isArray(key)) {
+          key = key[+this.shiftKey];
+        }
+
+        return key;
+      }
+    };
+    Object.defineProperty(KeyboardEvent.prototype, 'key', proto);
+    return proto;
+  }
+
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (keyboardeventKeyPolyfill),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+
+})();
+
+
+/***/ }),
+
 /***/ "./node_modules/lodash/lodash.js":
 /*!***************************************!*\
   !*** ./node_modules/lodash/lodash.js ***!
@@ -41823,6 +41955,449 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/static-edit/dist/index.js":
+/*!************************************************!*\
+  !*** ./node_modules/static-edit/dist/index.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var editor_1 = __webpack_require__(/*! ./src/editor */ "./node_modules/static-edit/dist/src/editor.js");
+exports.Editor = editor_1.Editor;
+
+
+/***/ }),
+
+/***/ "./node_modules/static-edit/dist/src/editor.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/static-edit/dist/src/editor.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var block_1 = __webpack_require__(/*! ./elements/block */ "./node_modules/static-edit/dist/src/elements/block.js");
+var line_1 = __webpack_require__(/*! ./elements/line */ "./node_modules/static-edit/dist/src/elements/line.js");
+var image_1 = __webpack_require__(/*! ./elements/image */ "./node_modules/static-edit/dist/src/elements/image.js");
+var bg_editable_1 = __webpack_require__(/*! ./elements/bg-editable */ "./node_modules/static-edit/dist/src/elements/bg-editable.js");
+var Editor = (function () {
+    function Editor(options) {
+        this.options = options;
+        this.selector = '.editable';
+        this.bgSelector = '.bg-editable';
+        this.handleOptions();
+        this.elems = [];
+        var elems = Array.from(document.querySelectorAll(this.selector));
+        elems = elems.concat(Array.from(document.querySelectorAll(this.bgSelector)));
+        for (var i = 0; i < elems.length; ++i) {
+            var elm = void 0;
+            var htmlElement = elems[i];
+            if (htmlElement.matches(this.bgSelector)) {
+                elm = new bg_editable_1.BgEditable(htmlElement, this);
+            }
+            else if (elems[i].tagName === 'P') {
+                elm = new block_1.Block(htmlElement, this);
+            }
+            else if (elems[i].tagName === 'IMG') {
+                elm = new image_1.Image(htmlElement, this);
+            }
+            else {
+                elm = new line_1.Line(htmlElement, this);
+            }
+            elm.bindEvents();
+            this.elems.push(elm);
+        }
+    }
+    Editor.prototype.handleOptions = function () {
+        if (this.options.saveButton === true) {
+            this.createSaveButton();
+        }
+        if (this.options.selector !== undefined) {
+            this.selector = this.options.selector;
+        }
+    };
+    Editor.prototype.editionStarted = function (elem, oldValue) {
+        if (this.editing) {
+            return false;
+        }
+        this.editing = true;
+        window.dispatchEvent(new CustomEvent('static_edit.editing', { detail: { elem: elem, oldValue: oldValue } }));
+        return true;
+    };
+    Editor.prototype.editionEnded = function (elem, oldValue, newValue) {
+        this.editing = false;
+        window.dispatchEvent(new CustomEvent('static_edit.edited', { detail: { elem: elem, oldValue: oldValue, newValue: newValue } }));
+    };
+    Editor.prototype.createSaveButton = function () {
+        var _this = this;
+        var button = document.createElement('button');
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.dispatchEvent(new CustomEvent('static_edit.saving', { detail: { changed: _this.elems.filter(function (e) { return e.hasChanged; }) } }));
+        });
+        button.textContent = 'Save';
+        button.style.position = 'absolute';
+        button.style.top = '20px';
+        button.style.left = '20px';
+        document.body.appendChild(button);
+    };
+    return Editor;
+}());
+exports.Editor = Editor;
+
+
+/***/ }),
+
+/***/ "./node_modules/static-edit/dist/src/elements/bg-editable.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/static-edit/dist/src/elements/bg-editable.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var file_upload_1 = __webpack_require__(/*! ./file-upload */ "./node_modules/static-edit/dist/src/elements/file-upload.js");
+var BgEditable = (function (_super) {
+    __extends(BgEditable, _super);
+    function BgEditable() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(BgEditable.prototype, "value", {
+        get: function () {
+            return this.elem.style.backgroundImage;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BgEditable.prototype.changeValue = function (value, name) {
+        this.elem.dataset.fileName = name;
+        this.elem.style.backgroundImage = "url(" + value + ")";
+    };
+    return BgEditable;
+}(file_upload_1.FileUpload));
+exports.BgEditable = BgEditable;
+
+
+/***/ }),
+
+/***/ "./node_modules/static-edit/dist/src/elements/block.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/static-edit/dist/src/elements/block.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var text_1 = __webpack_require__(/*! ./text */ "./node_modules/static-edit/dist/src/elements/text.js");
+var Block = (function (_super) {
+    __extends(Block, _super);
+    function Block() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Block.prototype.createField = function () {
+        return document.createElement('textarea');
+    };
+    return Block;
+}(text_1.Text));
+exports.Block = Block;
+
+
+/***/ }),
+
+/***/ "./node_modules/static-edit/dist/src/elements/editable.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/static-edit/dist/src/elements/editable.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Editable = (function () {
+    function Editable(elem, editor) {
+        this.elem = elem;
+        this.editor = editor;
+    }
+    Object.defineProperty(Editable.prototype, "element", {
+        get: function () {
+            return this.elem;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Editable.prototype, "hasChanged", {
+        get: function () {
+            return this.changed;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Editable;
+}());
+exports.Editable = Editable;
+
+
+/***/ }),
+
+/***/ "./node_modules/static-edit/dist/src/elements/file-upload.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/static-edit/dist/src/elements/file-upload.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var editable_1 = __webpack_require__(/*! ./editable */ "./node_modules/static-edit/dist/src/elements/editable.js");
+var FileUpload = (function (_super) {
+    __extends(FileUpload, _super);
+    function FileUpload() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    FileUpload.prototype.createField = function () {
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.style.display = 'none';
+        return input;
+    };
+    FileUpload.prototype.bindEvents = function () {
+        var _this = this;
+        this.elem.addEventListener('click', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var file = _this.createField();
+            file.addEventListener('change', function () {
+                var uploadedFile = file.files[0];
+                if (!!uploadedFile.type.match(/image.*/)) {
+                    var reader = new FileReader();
+                    reader.addEventListener('loadend', function (e) {
+                        var newValue = e.target.result;
+                        var oldValue = _this.value;
+                        _this.changeValue(newValue, uploadedFile.name);
+                        _this.changed = true;
+                        _this.elem.parentNode.removeChild(file);
+                        setTimeout(function () { return _this.editor.editionEnded(_this.elem, oldValue, newValue); }, 100);
+                    });
+                    reader.readAsDataURL(uploadedFile);
+                }
+            });
+            _this.elem.parentNode.appendChild(file);
+            file.click();
+        });
+    };
+    return FileUpload;
+}(editable_1.Editable));
+exports.FileUpload = FileUpload;
+
+
+/***/ }),
+
+/***/ "./node_modules/static-edit/dist/src/elements/image.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/static-edit/dist/src/elements/image.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var file_upload_1 = __webpack_require__(/*! ./file-upload */ "./node_modules/static-edit/dist/src/elements/file-upload.js");
+var Image = (function (_super) {
+    __extends(Image, _super);
+    function Image() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(Image.prototype, "value", {
+        get: function () {
+            return this.elem.src;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Image.prototype.changeValue = function (value, name) {
+        this.elem.src = value;
+        this.elem.dataset.fileName = name;
+    };
+    return Image;
+}(file_upload_1.FileUpload));
+exports.Image = Image;
+
+
+/***/ }),
+
+/***/ "./node_modules/static-edit/dist/src/elements/line.js":
+/*!************************************************************!*\
+  !*** ./node_modules/static-edit/dist/src/elements/line.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var text_1 = __webpack_require__(/*! ./text */ "./node_modules/static-edit/dist/src/elements/text.js");
+var Line = (function (_super) {
+    __extends(Line, _super);
+    function Line() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Line.prototype.createField = function () {
+        return document.createElement('input');
+    };
+    return Line;
+}(text_1.Text));
+exports.Line = Line;
+
+
+/***/ }),
+
+/***/ "./node_modules/static-edit/dist/src/elements/text.js":
+/*!************************************************************!*\
+  !*** ./node_modules/static-edit/dist/src/elements/text.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var editable_1 = __webpack_require__(/*! ./editable */ "./node_modules/static-edit/dist/src/elements/editable.js");
+var Text = (function (_super) {
+    __extends(Text, _super);
+    function Text() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(Text.prototype, "value", {
+        get: function () {
+            return this.elem.textContent;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Text.prototype.bindEvents = function () {
+        var _this = this;
+        this.elem.addEventListener('click', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            e.cancelBubble = true;
+            if (!_this.editor.editionStarted(_this.elem, _this.elem.innerText)) {
+                return false;
+            }
+            var input = _this.createField();
+            input.value = _this.elem.innerText;
+            input.addEventListener('blur', function () {
+                var oldValue = _this.elem.innerText;
+                var newValue = input.value;
+                _this.elem.innerText = newValue;
+                _this.changed = true;
+                input.parentNode.replaceChild(_this.elem, input);
+                // Make sure that no one triggers a new click on an editable while this is running
+                setTimeout(function () { return _this.editor.editionEnded(_this.elem, oldValue, newValue); }, 100);
+            });
+            input.addEventListener('click', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            });
+            var resize = function () {
+                input.style.height = 'auto';
+                input.style.height = input.scrollHeight + "px";
+            };
+            // Workaround for cut, paste, drop and keydown
+            var delayedResize = function () { return window.setTimeout(resize, 0); };
+            input.addEventListener('change', resize);
+            input.addEventListener('cut', delayedResize);
+            input.addEventListener('paste', delayedResize);
+            input.addEventListener('drop', delayedResize);
+            input.addEventListener('keydown', delayedResize);
+            input.style.width = 'auto';
+            input.style.height = _this.elem.offsetHeight + "px";
+            input.style.overflowY = "hidden";
+            input.style.fontSize = window.getComputedStyle(_this.elem).fontSize;
+            _this.elem.parentNode.replaceChild(input, _this.elem);
+            input.focus();
+            resize();
+        }, true);
+    };
+    return Text;
+}(editable_1.Editable));
+exports.Text = Text;
+
+
+/***/ }),
+
 /***/ "./node_modules/timers-browserify/main.js":
 /*!************************************************!*\
   !*** ./node_modules/timers-browserify/main.js ***!
@@ -53732,7 +54307,12 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 window.ClipboardJS = __webpack_require__(/*! clipboard */ "./node_modules/clipboard/dist/clipboard.js"); // Toastr
 
-window.toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js"); // Contrast function
+window.toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js"); // Static Edit (by @thomasruiz)
+
+window.StaticEdit = __webpack_require__(/*! static-edit */ "./node_modules/static-edit/dist/index.js"); // Polyfill
+
+__webpack_require__(/*! keyboardevent-key-polyfill */ "./node_modules/keyboardevent-key-polyfill/index.js").polyfill(); // Contrast function
+
 
 window.contrast = function contrast(hex) {
   var threshold = 130;

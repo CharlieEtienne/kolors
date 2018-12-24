@@ -21,12 +21,12 @@
 
     @yield('css')
 </head>
-<body>
+<body class="@if((isset($dark_mode) OR session('dark_mode') == 'dark') AND session('dark_mode') != 'light') dark @endif">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <span style="color:#8B1C42">k</span><span style="color:#0A4A75">o</span><span style="color:#36D6DA">l</span><span style="color:#F7B409">o</span><span style="color:#F03B0E">r</span><span style="color:#0AD875">s</span>
+                    <span id="logo-k">k</span><span id="logo-o">o</span><span id="logo-l">l</span><span id="logo-o2">o</span><span id="logo-r">r</span><span id="logo-s">s</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -40,6 +40,12 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        @auth    
+                            <!-- Switch to dark/light mode -->
+                            <li class="nav-item">    
+                                <a href="#" id="switch_mode" class="switch-dark-light nav-link" data-tooltip="tooltip" title="Dark/Light Mode"><i class="dark-mode-icon far fa-moon"></i><i class="light-mode-icon far fa-sun"></i></a>
+                            </li>
+                        @endauth
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
@@ -80,6 +86,120 @@
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        toastr.options = {
+            "positionClass": "toast-top-center",
+            "preventDuplicates": true,
+            "showDuration": "300",
+            "hideDuration": "600",
+            "timeOut": "1000",
+            "toastClass": '',
+        };
+
+        (function () {
+            new StaticEdit.Editor({
+                saveButton: false, // Whether to show the save button or not
+                selector: '.editable', // The selector to use for all the elements
+                bgSelector: '.bg-editable', // The selector to use for all background image edition
+            })
+        })();
+
+        // An editable element was clicked
+        window.addEventListener('static_edit.editing', function (e) {
+            document.addEventListener('keydown', function (e) {
+                if (e.key == 'Enter') {
+                    // ???
+                }
+            });
+        });
+
+        // An editable element was changed
+        window.addEventListener('static_edit.edited', function (e) {
+
+            var Elem        = $(e.detail.elem).data('elem');
+            var Type        = $(e.detail.elem).data('type');
+            var Id          = $(e.detail.elem).data('id');
+            var Action      = $(e.detail.elem).data('action');
+            var OldValue    = e.detail.oldValue;
+            var NewValue    = e.detail.newValue;
+            var DisplayType = 'project';
+
+            if (NewValue == '' || $.isEmptyObject(NewValue) ) {
+                switch (Type) {
+                    case 'p'  : DisplayType = 'project'; break;
+                    case 'pl' : DisplayType = 'palette'; break;
+                }
+                $(e.detail.elem).html('My ' + DisplayType);
+                NewValue = 'My ' + DisplayType;
+            }
+
+            if (Action == 'update') {
+
+                var AjaxUrl     = "{{ url('/')  }}" + "/" + Type + "/" + Id;
+                var AjaxType    = 'put';
+                var AjaxData    = {'Elem': Elem, 'Type': Type, 'Id': Id, 'NewValue': NewValue};
+
+            } else if (Action == 'create') {
+
+                if (NewValue == null && OldValue != '') {
+                    NewValue = OldValue;
+                }
+                var AjaxUrl     = "{{ url('/')  }}" + "/" + Type;
+                var AjaxType    = 'post';
+                var AjaxData    = {'Elem': Elem, 'Type': Type, 'NewValue': NewValue};
+                
+            }
+
+            if (OldValue != NewValue || Action == 'create') {
+                $.ajax({
+                    url: AjaxUrl,
+                    type: AjaxType,
+                    data: AjaxData,
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    datatype: "json",
+                    success: function (data) {
+                        toastr.options.toastClass = '';
+                        toastr.success(data.success);
+                        if (data.action == 'create') {
+                            $('#new-' + data.type).load(document.URL +  ' #' + data.type + '-' + data.id, function() {
+                                $(this).children(':first').unwrap();
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        toastr.error('Whoops! An error occured...');
+                    }
+                });
+            }
+        });
+
+        window.addEventListener('static_edit.saving', function (e) {
+            // The "save" button was clicked
+            // e.detail.changed: contains a list of the elements that have been changed
+            console.log(e.detail.changed);
+        });
+
+        $('#switch_mode').click(function (e) {
+            var dark_mode = false;
+            if ($('body').hasClass('dark')) {
+                dark_mode = true;
+            }
+            // console.log(dark_mode);
+            $.ajax({
+                type: "POST",
+                url:"/switch_mode",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {'dark_mode': dark_mode},
+                success: function (data) {
+                    // console.log(data);
+                    $('body').toggleClass('dark');
+                },
+                error: function(data){
+                    console.log(data);
+                }
+            });
+        });
+    </script>
     @yield('scripts')
 </body>
 </html>

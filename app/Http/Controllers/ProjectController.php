@@ -35,7 +35,20 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->has(['Elem', 'Type', 'NewValue'])) {
+            $project = new Project;
+
+            $project->{$request->Elem} = $request->NewValue;
+            $project->user_id = auth()->user()->id;
+            $project->save();
+            $id = $project->id;
+            return response()->json([
+                'success' => 'Project successfully created!', 
+                'id' => $id,
+                'action' => 'create',
+                'type' => 'project'
+            ]);
+        }
     }
 
     /**
@@ -71,7 +84,19 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if ($request->has(['Elem', 'Type', 'Id', 'NewValue'])) {
+            $project = Project::findOrFail($request->Id);
+            if ($project) {
+                $project->{$request->Elem} = $request->NewValue;
+                $project->save();
+                return response()->json([
+                    'success' => 'Project successfully updated!', 
+                    'id' => $id,
+                    'action' => 'update',
+                    'type' => 'project'
+                ]);
+            }
+        }
     }
 
     /**
@@ -82,6 +107,7 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Project::destroy($id);
+        return response()->json(['success' => 'Project deleted!', 'id' => $id]);
     }
 }

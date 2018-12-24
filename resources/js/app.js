@@ -21,6 +21,12 @@ window.ClipboardJS = require('clipboard');
 // Toastr
 window.toastr = require('toastr');
 
+// Static Edit (by @thomasruiz)
+window.StaticEdit = require('static-edit');
+
+// Polyfill
+require('keyboardevent-key-polyfill').polyfill();
+
 // Contrast function
 window.contrast = function contrast(hex){
     var threshold = 130;
