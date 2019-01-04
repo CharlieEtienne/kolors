@@ -35,7 +35,20 @@ class PaletteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->has(['Elem', 'Type', 'NewValue', 'BelongsTo'])) {
+            $palette = new Palette;
+
+            $palette->{$request->Elem} = $request->NewValue;
+            $palette->project_id = $request->BelongsTo;
+            $palette->save();
+            $id = $palette->id;
+            return response()->json([
+                'success' => 'palette successfully created!', 
+                'id' => $id,
+                'action' => 'create',
+                'type' => 'palette'
+            ]);
+        }
     }
 
     /**

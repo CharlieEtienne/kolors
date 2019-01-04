@@ -7,46 +7,60 @@
 @endsection
 
 @section('content')
-<div class="container">
-    
+<div class="container palettes-container">
+    <div class="row mt-4 mb-4 title">
+       <h2 class="editable-content"><a href="{{ url('/') }}" class="btn btn-sm btn-outline-secondary mr-2" style="line-height: 1em;"><i class="material-icons" style="transform: rotate(180deg);">subdirectory_arrow_right</i></a> <span class="editable" data-id="{{ $project->id }}" data-type="p" data-action="update" data-elem="name">{{ $project->name }}</span></h2>
+    </div>
+    <div class="row mt-4 mb-4" id="palette-add">
+        <button type="button" class="btn btn-add"><i class="fas fa-plus text-muted"></i>&nbsp;Add new palette</button>
+    </div>
     @foreach ($project->palettes as $palette)
-        <div class="row mt-4 border-bottom border-faded cursor-pointer" data-toggle="collapse" data-target="#palette-{{ $palette->id }}" aria-expanded="false" aria-controls="palette-{{ $palette->id }}">
-            <div class="col-sm-5 col-md-auto col-5 palette-heading">
-                <h3 class="text-truncate editable-content"><i class="fas fa-palette title-icon"></i><span class="editable" data-id="{{ $palette->id }}" data-type="pl" data-action="update" data-elem="name">{{$palette->name}}</span></h3>
-            </div>
-            <div class="col-sm-5 col-md-auto col-5 palette-mini-container">
-                <div class="palette-mini" id="palette-mini-{{ $palette->id }}">
-                    @foreach ($palette->colors->take(8) as $color)<span style="background-color:{{ $color->code }}"></span>@endforeach
+        <div id="palette-{{ $palette->id }}">
+            <div class="row mt-4 border-bottom border-faded cursor-pointer" data-toggle="collapse" data-target="#palette_item-{{ $palette->id }}" aria-expanded="true" aria-controls="palette_item-{{ $palette->id }}">
+                <div class="col-sm-5 col-md-auto col-5 palette-heading">
+                    <h3 class="text-truncate editable-content"><i class="fas fa-palette title-icon"></i><span class="editable" data-id="{{ $palette->id }}" data-type="pl" data-action="update" data-elem="name">{{$palette->name}}</span></h3>
                 </div>
-            </div>
-            <div class="col-auto ml-auto">
-                <button class="btn btn-sm btn-outline-secondary btn-expand pull-right collapsed" type="button" data-toggle="collapse" data-target="#palette-{{ $palette->id }}" aria-expanded="false" aria-controls="palette-{{ $palette->id }}"></button>
-            </div>
-        </div>
-        <div class="row palette collapse" id="palette-{{ $palette->id }}">
-                
-            @foreach ($palette->colors as $color)    
-                <div class="col-lg-4 col-sm-6 col-12 color-item" id="color-{{ $color->id }}">
-                    <div class="color-container flex-grow flexbox gap-items">
-                        <div class="color clipboard" data-clipboard-text="{{ $color->code }}" style="background-color:{{ $color->code }}"><i class="material-icons">colorize</i>
-                        </div>
-                        <div class="color-details text-truncate">
-                            <h6 class="color-name">{{ $color->name }}</h6>
-                            <span class="color-code"><code>{{ $color->code }}</code></span>
-                        </div>
+                <div class="col-sm-5 col-md-auto col-5 palette-mini-container">
+                    <div class="palette-mini" id="palette-mini-{{ $palette->id }}">
+                        @foreach ($palette->colors->take(8) as $color)<span style="background-color:{{ $color->code }}"></span>@endforeach
                     </div>
                 </div>
-            @endforeach
+                <div class="col-auto ml-auto">
+                    <button class="btn btn-sm btn-outline-secondary btn-expand pull-right" type="button" data-toggle="collapse" data-target="#palette_item-{{ $palette->id }}" aria-expanded="true" aria-controls="palette_item-{{ $palette->id }}"></button>
+                </div>
+            </div>
+            <div class="row palette collapse show" id="palette_item-{{ $palette->id }}">
+                    
+                @foreach ($palette->colors as $color)    
+                    <div class="col-lg-4 col-sm-6 col-12 color-item" id="color-{{ $color->id }}">
+                        <div class="color-container flex-grow flexbox gap-items">
+                            <div class="color clipboard" data-clipboard-text="{{ $color->code }}" style="background-color:{{ $color->code }}">
+                                <i class="material-icons">colorize</i>
+                            </div>
+                            <div class="color-details">
+                                <h6 class="color-name text-truncate">{{ $color->name }}</h6>
+                                <span class="color-code"><code>{{ $color->code }}</code></span>
+                            </div>
+                            <div><button type="button" class="btn btn-link btn-edit-color" v-on:click="state.ColorEdit=true"><i class="fas fa-pen"></i></button></div>
+                        </div>
+                        <chrome-picker v-if="state.ColorEdit" :value="'{{ $color->code }}'"></chrome-picker>
+                    </div>
+                @endforeach
+                <div class="col-lg-4 col-sm-6 col-12 " id="color-add">
+                    <button type="button" class="btn btn-block btn-add mt-0" style="margin-bottom: 15px; height:78px;" :style="{'background-color': bgc}" data-belongs-to="{{ $palette->id }}"><i class="fas fa-plus text-muted"></i>&nbsp;Add new color</button>
+                    <chrome-picker :value="colors" @input="updateValue"></chrome-picker>
+                </div>
 
+            </div>
         </div>
     @endforeach
+
 
 </div>
 @endsection
 
 @section('scripts')
     <script>
-        
 
         $('.color').hover(function (e) {
             
@@ -151,5 +165,28 @@
                 }
             })
         }
+
+        // Add new palette
+        $(document).on('click','#palette-add button', function (e) {
+            $('.palettes-container').append('<div class="row mt-4 border-bottom border-faded cursor-pointer" id="new-palette"><div class="col-sm-5 col-md-auto col-5 palette-heading"><h3 class="text-truncate editable-content"><i class="fas fa-palette title-icon"></i><span class="editable" data-type="pl" data-action="create" data-belongs-to="'+{{$project->id}}+'" data-elem="name">My palette</span></h3></div></div>');
+            new StaticEdit.Editor({
+                saveButton: false,
+                selector: '.editable',
+                bgSelector: '.bg-editable',
+            });
+            $('#new-palette .palette-heading .editable').trigger('click');
+        });
+
+        // Add new color
+        $(document).on('click','#color-add button', function (e) {
+            var PaletteId = e.target.dataset.belongsTo;
+            $('.palettes-container').append('<div class="row mt-4 border-bottom border-faded cursor-pointer" id="new-color"><div class="col-sm-5 col-md-auto col-5 palette-heading"><h3 class="text-truncate editable-content"><i class="fas fa-palette title-icon"></i><span class="editable" data-type="pl" data-action="create" data-belongs-to="'+ PaletteId +'" data-elem="name">My palette</span></h3></div></div>');
+            // new StaticEdit.Editor({
+            //     saveButton: false,
+            //     selector: '.editable',
+            //     bgSelector: '.bg-editable',
+            // });
+            // $('#new-color .palette-heading .editable').trigger('click');
+        });
     </script>
 @endsection

@@ -40,12 +40,16 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        @auth    
-                            <!-- Switch to dark/light mode -->
-                            <li class="nav-item">    
-                                <a href="#" id="switch_mode" class="switch-dark-light nav-link" data-tooltip="tooltip" title="Dark/Light Mode"><i class="dark-mode-icon far fa-moon"></i><i class="light-mode-icon far fa-sun"></i></a>
-                            </li>
-                        @endauth
+   
+                        <!-- Switch to dark/light mode -->
+                        <li class="nav-item">    
+                            <a href="#" id="switch_mode" class="switch-dark-light nav-link" data-tooltip="tooltip" title="Dark/Light Mode"><i class="dark-mode-icon far fa-moon"></i><i class="light-mode-icon far fa-sun"></i></a>
+                        </li>
+                        <!-- GitHub link -->
+                        <li class="nav-item">
+                            <a href="https://github.com/CharlieEtienne/kolors" class=" nav-link" data-tooltip="tooltip" title="Code"><i class="fab fa-github"></i></a>
+                        </li>
+
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
@@ -83,6 +87,15 @@
         <main class="py-4">
             @yield('content')
         </main>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div class="m-auto"><a href="https://github.com/CharlieEtienne/kolors"><i class="fab fa-github pt-3 pb-3 text-pale" style="font-size: 2em;"></i></a></div>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
@@ -122,6 +135,7 @@
             var Action      = $(e.detail.elem).data('action');
             var OldValue    = e.detail.oldValue;
             var NewValue    = e.detail.newValue;
+            var BelongsTo   = $(e.detail.elem).data('belongs-to');
             var DisplayType = 'project';
 
             if (NewValue == '' || $.isEmptyObject(NewValue) ) {
@@ -146,7 +160,7 @@
                 }
                 var AjaxUrl     = "{{ url('/')  }}" + "/" + Type;
                 var AjaxType    = 'post';
-                var AjaxData    = {'Elem': Elem, 'Type': Type, 'NewValue': NewValue};
+                var AjaxData    = {'Elem': Elem, 'Type': Type, 'NewValue': NewValue, 'BelongsTo': BelongsTo};
                 
             }
 

@@ -5,7 +5,7 @@
                 <div class="card card-default">
                     <div class="card-header">Example Component</div>
 
-                    <div class="card-body">
+                    <div class="card-body" @click="coucou">
                         I'm an example component.
                     </div>
                 </div>
@@ -18,6 +18,11 @@
     export default {
         mounted() {
             console.log('Component mounted.')
+        },
+        methods: {
+            coucou: function(index) {
+                alert('coucou');
+            },
         }
     }
 </script>

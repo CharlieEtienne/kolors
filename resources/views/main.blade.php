@@ -30,7 +30,7 @@
             </div>
         @endforeach
         <div class="col-lg-3 col-md-4 col-sm-6 col-12 project" id="project-add">
-            <button type="button" class="btn btn-block btn-add"><i class="fas fa-plus text-muted"></i>&nbsp;Add new</button>
+            <button type="button" class="btn btn-block btn-add"><i class="fas fa-plus text-muted"></i>&nbsp;Add new project</button>
         </div>
 
     </div>
@@ -79,6 +79,6 @@
                 bgSelector: '.bg-editable',
             });
             $('#new-project .project-title .editable').trigger('click');
-        })
+        });
     </script>
 @endsection
