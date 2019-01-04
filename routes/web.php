@@ -18,7 +18,7 @@ Route::resource('pl', 'PaletteController')->middleware('auth');
 Route::resource('c', 'ColorController')->middleware('auth');
 Route::resource('t', 'TypoController')->middleware('auth');
 
-Route::view('getallcolors', 'getallcolors');
+Route::view('in/code', 'getallcolors');
 
 Route::post('updateColorPalette', 'ColorController@updateColorPalette')->middleware('auth');
 

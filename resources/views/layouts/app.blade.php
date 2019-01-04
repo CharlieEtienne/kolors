@@ -28,27 +28,24 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <span id="logo-k">k</span><span id="logo-o">o</span><span id="logo-l">l</span><span id="logo-o2">o</span><span id="logo-r">r</span><span id="logo-s">s</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li class="nav-item">
+                            <a href="{{ url('/') }}" class="nav-link">Home</a>
+                        </li>
+                        <!-- Colors in code -->
+                        <li class="nav-item">
+                            <a href="{{ url('in/code') }}" class="nav-link">Colors in Code</a>
+                        </li>
                     </ul>
-
+                    
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-   
-                        <!-- Switch to dark/light mode -->
-                        <li class="nav-item">    
-                            <a href="#" id="switch_mode" class="switch-dark-light nav-link" data-tooltip="tooltip" title="Dark/Light Mode"><i class="dark-mode-icon far fa-moon"></i><i class="light-mode-icon far fa-sun"></i></a>
-                        </li>
-                        <!-- GitHub link -->
-                        <li class="nav-item">
-                            <a href="https://github.com/CharlieEtienne/kolors" class=" nav-link" data-tooltip="tooltip" title="Code"><i class="fab fa-github"></i></a>
-                        </li>
 
                         <!-- Authentication Links -->
                         @guest
@@ -81,7 +78,18 @@
                         @endguest
                     </ul>
                 </div>
+                <ul class="navbar-nav toolbar-tools">
+                    <!-- Switch to dark/light mode -->
+                    <li class="nav-item">    
+                        <a href="#" id="switch_mode" class="switch-dark-light nav-link" data-tooltip="tooltip" title="Dark/Light Mode"><i class="dark-mode-icon far fa-moon text-pale"></i><i class="light-mode-icon far fa-sun"></i></a>
+                    </li>
+                    <!-- GitHub link -->
+                    <li class="nav-item">
+                        <a href="https://github.com/CharlieEtienne/kolors" class=" nav-link" data-tooltip="tooltip" title="Code"><i class="fab fa-github text-pale"></i></a>
+                    </li>
+                </ul>
             </div>
+            
         </nav>
 
         <main class="py-4">

@@ -31,6 +31,9 @@ h6, .h6 {
   font-size: 14px;
   font-weight: 400;
 }
+.navbar-brand {
+  margin-right: 2rem;
+}
 .btn-faded {
   color: $body-text;
   background-color: #fff;
@@ -114,11 +117,37 @@ h6, .h6 {
   color: #fff !important;
 }
 
+a.no-link {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.btn-purple {
+  background: #8a1c42;
+  color: #fff !important;
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
+}
+.btn-purple:hover {
+  background: #be3263;
+  color: #fff !important;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.45);
+}
+.btn>.material-icons {
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
 .text-pale {
   color: rgba(0,0,0,0.2) !important;
 }
+.text-pale-less {
+  color: rgba(0,0,0,0.3) !important;
+}
 .dark .text-pale {
   color: rgba(255,255,255,0.2) !important;
+}
+.dark .text-pale-less {
+  color: rgba(255,255,255,0.3) !important;
 }
 
 .btn, .form-control {
@@ -309,6 +338,9 @@ h6, .h6 {
 }
 .detailed .color-container .original {
   display: none;
+}
+.navbar .nav-link i {
+  font-size: 1.3rem;
 }
 .color-code em {
   font-style: normal;
@@ -1074,4 +1106,41 @@ span.color-code {
       transform: rotateY(20deg);
     }
 	}
+}
+.dark .tgl-ios + .tgl-btn {
+  background: #595f66;
+  border: 1px solid #999c9f;
+}
+.dark .tgl-ios + .tgl-btn:after {
+  background: #999c9f;
+}
+.dark .tgl-btn:hover {
+  border: 1px solid #bcc4cf;
+  background: #6a6f76;
+}
+.dark .tgl-btn:hover:after,
+.dark .tgl:checked + .tgl-btn:after {
+  background: #bcc4cf;
+}
+.dark .tgl-ios:checked + .tgl-btn {
+  background: #f66D9b !important;
+}
+.toolbar-tools {
+  flex-direction: row;
+}
+.toolbar-tools a {
+  padding-right: 0.5rem !important;
+  padding-left: 0.5rem !important;
+  line-height: 1;
+}
+.navbar-toggler {
+  padding: 0.25rem;
+  font-size: 1.125rem;
+  line-height: 1;
+  background-color: transparent;
+  border: none;
+  border-radius: 0.25rem;
+}
+button {
+  outline: none !important;
 }

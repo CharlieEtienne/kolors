@@ -42,6 +42,7 @@
         });
         Code = CodeMirror.fromTextArea(document.getElementById("codemirror"), {
             mode: "htmlmixed",
+            lineNumbers: true,
             matchBrackets: true,
             theme: 'material',
             scrollbarStyle: 'simple',
