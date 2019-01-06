@@ -34,6 +34,10 @@ import 'codemirror/mode/htmlmixed/htmlmixed.js';
 import 'codemirror/mode/css/css.js';
 import 'codemirror/mode/javascript/javascript.js';
 import 'codemirror/addon/scroll/simplescrollbars.js';
+import 'codemirror/addon/search/search.js';
+import 'codemirror/addon/search/searchcursor.js';
+import 'codemirror/addon/search/match-highlighter.js';
+import 'codemirror/addon/mode/overlay.js';
 
 // Vue Color Pickers Tools
 import { Photoshop,Chrome,Compact,Material,Sketch,Slider,Swatches } from 'vue-color'
@@ -54,6 +58,9 @@ var regex = {
     "hex" : /(#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}))/g,
     "hsl" : /(hsla?\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,?\s*(\d*(?:\.\d+)?)\))/g
 };
+
+var fullRegex = /((rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*(\d*(?:\.\d+)?)\))|(#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}))|(hsla?\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,?\s*(\d*(?:\.\d+)?)\)))/;
+
 function parseCss(css){
     var rgbColors = getColors(css,"rgb");
     var hexColors = getColors(css,"hex");
@@ -71,7 +78,35 @@ function getColors(css,type){
         }
     } while (m);
     return Array.from( new Set( ca ) );
-}  
+}
+
+CodeMirror.defineMode("kolors", function(config, parserConfig) {
+    var kolorsOverlay = {
+    //   token: function(stream, state) {
+    //       console.log(stream);
+    //     //var colorsInStream = '/' + fullRegex.exec(stream.string);
+    //     if (stream.match(fullRegex)) {
+    //         return "kolors";
+    //     }
+
+    //     while (stream.next() != null && !stream.match(fullRegex)) {}
+    //     return null;
+    //     // parseCss(stream).map(function(value){
+    //     //     return "kolors";
+    //     // });
+    //     // return null;
+    //   }
+      token: function(stream, state) {
+        var ch;
+        if (stream.match(fullRegex)) {
+            return "kolors"
+        }
+        while (stream.next() != null && !stream.match(fullRegex, false)) {}
+        return null;
+      }
+    };
+    return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || "htmlmixed"), kolorsOverlay);
+});
 
 window.getAllColors = function getAllColors(codeStr) {
 

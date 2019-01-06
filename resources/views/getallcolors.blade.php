@@ -32,6 +32,7 @@
 
 @section('scripts')
     <script>
+
         $(document).on('change', '#cb2', function (e) {
             if ($('#cb2').prop('checked') == true) {
                 $('.palette').addClass('detailed');
@@ -41,17 +42,42 @@
             }
         });
         Code = CodeMirror.fromTextArea(document.getElementById("codemirror"), {
-            mode: "htmlmixed",
+            mode: "kolors",
             lineNumbers: true,
             matchBrackets: true,
             theme: 'material',
             scrollbarStyle: 'simple',
         });
 
-        Code.setValue('<!-- Paste or write some code here to get all colors inside it! -->\n');
+        var demoCode = '';
+        // demoCode += '<!-- Paste or write some code here to get all colors inside it! -->\n';
+        // demoCode += '<style>\n';
+        // demoCode += '   #k { color:#8B1C42 }\n';
+        // demoCode += '   #o { color:#0A4A75 }\n';
+        // demoCode += '   #l { color:#36D6DA }\n';
+        // demoCode += '   #o { color:#F7B409 }\n';
+        // demoCode += '   #r { color:#F03B0E }\n';
+        // demoCode += '   #s { color:#0AD875 }\n';
+        // demoCode += '</style>';
+        demoCode += '<!-- Paste or write some code here to get all colors inside it! -->\n\n';
+        demoCode += '<!-- FROM CSS  --> <style> #kolors { color:#8B1C42 } </style>\n\n';
+        demoCode += '<!-- FROM JS   --> <script> $(\'#kolors\').css( \'color\', \'#0A4A75\' ); <\/script>\n\n';
+        demoCode += '<!-- FROM HTML --> <span id="kolors" style="#36D6DA">kolors</span>\n\n';
+        demoCode += '<!-- OR TEXT   --> kolors => #F7B409 (or maybe #F03B0E or #0AD875)';
+        Code.setValue(demoCode);
         Code.focus();
 
         Code.on('change', function (e) {
+            displayColors();
+        });
+
+        $(document).ready(function (e) {
+            displayColors();
+            hoverColor();
+        });
+        
+        function displayColors() {
+            
             var codeStr = Code.getValue();
             colorsInCode = getAllColors(codeStr);
             $('.palette').html('');
@@ -71,7 +97,7 @@
                 str += '<span class="color-code hsl"><em>HSL: </em><code>' + color.hsl + '</code></span>';
                 str += '<span class="color-code name"><em>NAME: </em>';
                 if(color.name) {
-                   str += '<code>' + color.name + '</code>';
+                str += '<code>' + color.name + '</code>';
                 }
                 else {
                     str += '<em>N/A</em>'
@@ -81,13 +107,61 @@
 
                 $('.palette').append(str);
             });
-        });
-
+            hoverColor();
+        }
         var clipboard = new ClipboardJS('.clipboard');
         
         clipboard.on('success', function(e) {
             toastr.options.toastClass = 'copy';
             toastr.success('Copied ' + e.text + ' to clipboard!');
         });
+
+        function hoverColor() {
+            $('.color').hover(function (e) {
+            
+                var container = $(this).parents('.color-container');
+                var icon = $(this).find('.material-icons');
+                var name = $(container).find('.color-name');
+                var code = $(container).find('.color-code em, .color-code code');
+                var color = $(this).data('clipboard-text');
+                var cst = contrast(color);
+
+                $(icon).css({
+                    'opacity': 1,
+                    'color': cst
+                });
+                
+                $(container)
+                    .css('background-color', color)
+                    .toggleClass('hover')
+                    .attr('data-original-title', 'Click to copy ' + color)
+                    .tooltip('show');
+                
+                $(name).css('cssText', 'color:' + cst + ' !important;');
+                
+                $(code).css('cssText', 'color:' + cst + ' !important;');
+
+            }, function (e) {
+
+                var container = $(this).parents('.color-container');
+                var icon = $(this).find('.material-icons');
+                var name = $(container).find('.color-name');
+                var code = $(container).find('.color-code em, .color-code code');
+
+                $(icon).css({
+                    'opacity': 0,
+                    'color': ''
+                });
+
+                $(container)
+                    .css('background-color', '')
+                    .toggleClass('hover')
+                    .tooltip('dispose');
+
+                $(name).css('cssText', '');
+                $(code).css('cssText', '');
+
+            });
+        }
     </script>
 @endsection

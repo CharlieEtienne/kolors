@@ -81,11 +81,11 @@
                 <ul class="navbar-nav toolbar-tools">
                     <!-- Switch to dark/light mode -->
                     <li class="nav-item">    
-                        <a href="#" id="switch_mode" class="switch-dark-light nav-link" data-tooltip="tooltip" title="Dark/Light Mode"><i class="dark-mode-icon far fa-moon text-pale"></i><i class="light-mode-icon far fa-sun"></i></a>
+                        <a href="#" id="switch_mode" class="switch-dark-light nav-link text-pale" data-tooltip="tooltip" title="Dark/Light Mode"><i class="dark-mode-icon far fa-moon"></i><i class="light-mode-icon far fa-sun"></i></a>
                     </li>
                     <!-- GitHub link -->
                     <li class="nav-item">
-                        <a href="https://github.com/CharlieEtienne/kolors" class=" nav-link" data-tooltip="tooltip" title="Code"><i class="fab fa-github text-pale"></i></a>
+                        <a href="https://github.com/CharlieEtienne/kolors" class="nav-link text-pale" data-tooltip="tooltip" title="Code"><i class="fab fa-github"></i></a>
                     </li>
                 </ul>
             </div>

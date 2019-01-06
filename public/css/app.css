@@ -15995,6 +15995,18 @@ h6,
   color: #fff !important;
 }
 
+.dark textarea {
+  background-color: #292e32;
+  border: none;
+  outline: none;
+  color: inherit;
+  padding: 15px;
+}
+
+textarea#codemirror {
+  display: none;
+}
+
 a.no-link {
   color: inherit !important;
   text-decoration: none !important;
@@ -16255,11 +16267,26 @@ a.no-link {
   font-style: normal;
   font-size: 0.8rem;
   margin-right: 2px;
+}
+
+.color-container:not(.hover) .color-code em {
   color: rgba(38, 50, 56, 0.6);
 }
 
-.dark .color-code em {
+.dark .color-container:not(.hover) .color-code em {
   color: rgba(152, 174, 185, 0.6);
+}
+
+.color-container:not(.hover) .color-code.orig em {
+  color: rgba(38, 50, 56, 0.45) !important;
+}
+
+.color-container:not(.hover) .color-code.orig code {
+  color: rgba(246, 109, 155, 0.66) !important;
+}
+
+.dark .color-container:not(.hover) .color-code.orig em {
+  color: rgba(152, 174, 185, 0.45) !important;
 }
 
 .color-name {
@@ -16270,6 +16297,21 @@ a.no-link {
 .color-code code {
   font-size: 100%;
   transition: color 0.15s ease-in;
+}
+
+.color-code em {
+  transition: color 0.15s ease-in;
+}
+
+.cm-matchhighlight {
+  background: #465156;
+}
+
+.cm-kolors {
+  color: #ffffff;
+  background: #009688;
+  border-radius: 3px;
+  padding: 2px 3px;
 }
 
 .palette {
