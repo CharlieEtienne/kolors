@@ -323,6 +323,7 @@ a.no-link {
   flex-shrink: 0;
   position: relative;
   display: inline-block;
+  margin: -1px;
   width: 44px;
   height: 44px;
   line-height: 44px;
@@ -520,8 +521,8 @@ button.project-delete:hover {
 .color-background {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
   border-radius: 100%;
-  height: 44px;
-  width: 44px;
+  height: 42px;
+  width: 42px;
 }
 span.color-code {
   clear: both;
