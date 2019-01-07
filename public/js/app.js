@@ -69029,21 +69029,25 @@ $(document).ready(function () {
   });
 }); // Typescript color tool
 
-var tinycolor = __webpack_require__(/*! tinycolor2 */ "./node_modules/tinycolor2/tinycolor.js"); // Based on Chamarel work (https://github.com/praveenpuglia/chamarel)
+var tinycolor = __webpack_require__(/*! tinycolor2 */ "./node_modules/tinycolor2/tinycolor.js"); // Based on Chamarel work (https://github.com/praveenpuglia/chamarel) (modified)
+// Support of Alpha hex : https://gist.github.com/olmokramer/82ccce673f86db7cda5e#gistcomment-1651109
+// Support of color name : https://gist.github.com/olmokramer/82ccce673f86db7cda5e#gistcomment-1651109 (modified)
 
 
 var regex = {
-  "rgb": /(rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*(\d*(?:\.\d+)?)\))/g,
-  "hex": /(#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}))/g,
-  "hsl": /(hsla?\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,?\s*(\d*(?:\.\d+)?)\))/g
+  "rgb": /(rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*(\d*(?:\.\d+)?)\))/gi,
+  "hex": /(#(?:[0-9a-fA-F]{2,4}){2,4}|(#[0-9a-fA-F]{3}))/gi,
+  "hsl": /(hsla?\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,?\s*(\d*(?:\.\d+)?)\))/gi,
+  "name": /(black|silver|gray|whitesmoke|maroon|red|purple|fuchsia|green|lime|olivedrab|yellow|navy|blue|teal|aquamarine|orange|aliceblue|antiquewhite|aqua|azure|beige|bisque|blanchedalmond|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|gainsboro|ghostwhite|goldenrod|gold|greenyellow|grey|honeydew|hotpink|indianred|indigo|ivory|khaki|lavenderblush|lavender|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|limegreen|linen|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|oldlace|olive|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|skyblue|slateblue|slategray|slategrey|snow|springgreen|steelblue|tan|thistle|tomato|turquoise|violet|wheat|white|yellowgreen|rebeccapurple)/gi
 };
-var fullRegex = /((rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*(\d*(?:\.\d+)?)\))|(#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}))|(hsla?\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,?\s*(\d*(?:\.\d+)?)\)))/;
+var fullRegex = /((rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*(\d*(?:\.\d+)?)\))|(#(?:[0-9a-fA-F]{2,4}){2,4}|(#[0-9a-fA-F]{3}))|(hsla?\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,?\s*(\d*(?:\.\d+)?)\)))|(black|silver|gray|whitesmoke|maroon|red|purple|fuchsia|green|lime|olivedrab|yellow|navy|blue|teal|aquamarine|orange|aliceblue|antiquewhite|aqua|azure|beige|bisque|blanchedalmond|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|gainsboro|ghostwhite|goldenrod|gold|greenyellow|grey|honeydew|hotpink|indianred|indigo|ivory|khaki|lavenderblush|lavender|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|limegreen|linen|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|oldlace|olive|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|skyblue|slateblue|slategray|slategrey|snow|springgreen|steelblue|tan|thistle|tomato|turquoise|violet|wheat|white|yellowgreen|rebeccapurple)/i;
 
 function parseCss(css) {
   var rgbColors = getColors(css, "rgb");
   var hexColors = getColors(css, "hex");
   var hslColors = getColors(css, "hsl");
-  return rgbColors.concat(hexColors, hslColors);
+  var nameColors = getColors(css, "name");
+  return rgbColors.concat(hexColors, hslColors, nameColors);
 }
 
 function getColors(css, type) {
@@ -69064,19 +69068,6 @@ function getColors(css, type) {
 
 CodeMirror.defineMode("kolors", function (config, parserConfig) {
   var kolorsOverlay = {
-    //   token: function(stream, state) {
-    //       console.log(stream);
-    //     //var colorsInStream = '/' + fullRegex.exec(stream.string);
-    //     if (stream.match(fullRegex)) {
-    //         return "kolors";
-    //     }
-    //     while (stream.next() != null && !stream.match(fullRegex)) {}
-    //     return null;
-    //     // parseCss(stream).map(function(value){
-    //     //     return "kolors";
-    //     // });
-    //     // return null;
-    //   }
     token: function token(stream, state) {
       var ch;
 
