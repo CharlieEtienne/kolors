@@ -69104,7 +69104,7 @@ window.getAllColors = function getAllColors(codeStr) {
     ++index;
   });
   return allColors;
-}; // Contrast function
+}; // Contrast function ( http://www.davidhalford.com/thoughts/2013/auto-contrasting-text/ )
 
 
 window.contrast = function contrast(hex) {
@@ -69136,7 +69136,8 @@ window.contrast = function contrast(hex) {
   } else {
     return "#ffffff";
   }
-};
+}; // Vue-color default
+
 
 var defaultProps = {
   hex: '#194d33e6',
