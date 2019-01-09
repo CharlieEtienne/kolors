@@ -7,7 +7,22 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'kolors') }}</title>
+
+    <meta name="description" content="A free Colors and Typos Library for web designers and developers">
+	<meta name="author" content="Charlie ETIENNE">
+	<meta name="google-site-verification" content="">
+	<link rel="shortcut icon" href="{{ url('/') }}/favicon.png">
+	<link rel="image_src" type="image/jpeg" href="{{ url('/') }}/kolors-logo.png">
+	
+<!--Open Graph Protocol-->
+	<meta property="og:image" content="{{ url('/') }}/kolors-logo.png">
+	<meta property="og:image:type" content="image/jpeg">
+	<meta property="og:site_name" content="kolors">
+	<meta property="og:title" content="kolors">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://kolors.app/">
+	<meta property="og:description" content="A free Colors and Typos Library for web designers and developers">
 
     
 
