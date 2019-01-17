@@ -3,7 +3,7 @@
 <p align="center" style="text-align:center; width: 100%"><a align="center" style="text-align:center; width: 100%" href="https://kolors.app" target="_blank">https://kolors.app</a></p>
 
 <p align="center" style="text-align:center; width: 100%">Free Colors and Typos Library per project for web designers and developers</p>
-<p align="center" style="text-align:center; width: 100%"><img align="center" src ="https://badges.frapsoft.com/os/v3/open-source.png" /></p>
+<p align="center" style="text-align:center; width: 100%"><img align="center" src ="https://img.shields.io/badge/FREE-FOREVER-f66D9b.svg?style=flat-square" />&nbsp;&nbsp;&nbsp;&nbsp;<img align="center" src ="https://badges.frapsoft.com/os/v3/open-source.png" /></p>
 
 <p>&nbsp;</p>
 
@@ -16,6 +16,6 @@
 <p align="center" style="text-align:center; width: 100%"><a align="center" style="text-align:center; width: 100%" href="https://kolors.app/in/code" target="_blank">https://kolors.app/in/code</a></p>
 
 <p align="center" style="text-align:center; width: 100%">Free tool to find colors in your code</p>
-<p align="center" style="text-align:center; width: 100%"><img align="center" src ="https://badges.frapsoft.com/os/v3/open-source.png" /></p>
+<p align="center" style="text-align:center; width: 100%"><img align="center" src ="https://img.shields.io/badge/FREE-FOREVER-f66D9b.svg?style=flat-square" />&nbsp;&nbsp;&nbsp;&nbsp;<img align="center" src ="https://badges.frapsoft.com/os/v3/open-source.png" /></p>
 
 <p align="center" style="text-align:center; width: 100%"><a align="center" style="text-align:center; width: 100%" href="https://kolors.app/in/code" target="_blank"><img width="100%" align="center" src ="https://github.com/CharlieEtienne/kolors/blob/master/public/kolors-demo.gif" /></a></p>
