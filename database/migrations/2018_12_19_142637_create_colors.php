@@ -18,7 +18,7 @@ class CreateColors extends Migration
             $table->timestamps();
             $table->string('name');
             $table->string('code');
-            $table->unsignedInteger('project_id');
+            $table->unsignedInteger('palette_id');
             $table->foreign('palette_id')
                 ->references('id')->on('palettes')
                 ->onDelete('cascade');
